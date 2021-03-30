@@ -1,0 +1,9 @@
+.singleCard {
+    width: 200px;
+    border: 1px solid black;
+    display: block;
+}
+
+img {
+    width: 100%;
+}
