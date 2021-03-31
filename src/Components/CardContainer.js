@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Card from "./Card"
 import data from "../assets/data";
+import "../Container.css"
 
 function CardContainer() {
     const [cardsData, setCardsData] = useState(data);
@@ -30,27 +31,32 @@ function CardContainer() {
         return newArray;
     }
 
+    useEffect(() => { console.log("inside default effect") });
+    useEffect(() => {
+        if (highScore < score) {
+            setHighScore(score);
+        }
+        console.log("inside high score effect", cardsData);
+
+    }, [highScore, score, cardsData]);
+
     function handleClick(id) {
-        setCardsData(prevState => {
-            if (!prevState[id].isClicked) {
-                addPoint();
+        if (!cardsData[id].isClicked) {
+            setScore(score => score + 1);
+            setCardsData(prevState => {
                 return {
                     ...prevState,
                     [id]: {
                         ...prevState[id],
                         isClicked: true
                     }
-                };
-            }
-            else {
-                return ({ ...prevState })
-            }
-        });
-    }
-
-    function addPoint() {
-        console.log(score);
-        setScore(prevState => prevState + 1);
+                }
+            })
+        }
+        else {
+            setScore(0);
+            setCardsData(data);
+        }
     }
 
     return (
@@ -61,7 +67,9 @@ function CardContainer() {
             <h3>
                 High Score: {highScore}
             </h3>
-            {shuffleArray(cardsList)}
+            <div className="container">
+                {shuffleArray(cardsList)}
+            </div>
         </div>
     )
 }
